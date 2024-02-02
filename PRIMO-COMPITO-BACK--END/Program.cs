@@ -43,17 +43,18 @@ namespace PRIMO_COMPITO_BACK__END
                 Contribuente myContribuente = new Contribuente(name, surname, dataNascita, codiceFiscale, sesso, comuneResidenza, redditoAnnuale);
 
                 Console.Clear();
-
+                Console.WriteLine("========================");
                 Console.WriteLine("Dettagli inseriti:");
                 Console.WriteLine($"Contribuente: {myContribuente.Name} {myContribuente.Surname}");
                 
-                Console.WriteLine($"Nato il: {myContribuente.DataNascita} ({sesso})");
+                Console.WriteLine($"Nato il: {myContribuente.DataNascita} ({myContribuente.Sesso})");
                 Console.WriteLine($"Codice Fiscale: {myContribuente.CodiceFiscale}");
                
-                Console.WriteLine($"Residente in: {comuneResidenza}");
-                Console.WriteLine($"Reddito dichiarato: {redditoAnnuale}");
+                Console.WriteLine($"Residente in: {myContribuente.ComuneResidenza}");
+                Console.WriteLine($"Reddito dichiarato: {myContribuente.RedditoAnnuale}");
                 Console.WriteLine("v       v");
                 Console.WriteLine($"IMPOSTA DA VERSARE: {myContribuente.CalcolaImposta()}");
+                Console.WriteLine("========================");
 
                 Console.WriteLine("Per uscire, premere 'e'. Altrimenti, premere un tasto qualsiasi.");
                 ConsoleKeyInfo exitKey = Console.ReadKey();
@@ -195,7 +196,13 @@ namespace PRIMO_COMPITO_BACK__END
             {
                 try
                 {
-                 
+                    while (!IsValidSesso(value))
+                    {
+                        Console.WriteLine("Errore: Il sesso deve essere 'm' o 'f'.");
+                        Console.Write("Inserisci nuovamente il sesso: ");
+                        value = Console.ReadLine();
+                    }
+
                     _sesso = value;
                 }
                 catch (Exception ex)
@@ -205,6 +212,12 @@ namespace PRIMO_COMPITO_BACK__END
             }
         }
 
+        private bool IsValidSesso(string value)
+        {
+            return value.ToLower() == "m" || value.ToLower() == "f";
+        }
+
+
         public string ComuneResidenza
         {
             get { return _comuneResidenza; }
@@ -212,7 +225,13 @@ namespace PRIMO_COMPITO_BACK__END
             {
                 try
                 {
-                   
+                    while (!IsValidComuneResidenza(value))
+                    {
+                        Console.WriteLine("Errore: Il comune di residenza deve essere lungo almeno 3 caratteri.");
+                        Console.Write("Inserisci nuovamente il comune di residenza: ");
+                        value = Console.ReadLine();
+                    }
+
                     _comuneResidenza = value;
                 }
                 catch (Exception ex)
@@ -222,6 +241,11 @@ namespace PRIMO_COMPITO_BACK__END
             }
         }
 
+        private bool IsValidComuneResidenza(string value)
+        {
+            return value.Length >= 3;
+        }
+
         public int RedditoAnnuale
         {
             get { return _redditoAnnuale; }
@@ -229,7 +253,15 @@ namespace PRIMO_COMPITO_BACK__END
             {
                 try
                 {
-                    
+                    while (!IsValidRedditoAnnuale(value))
+                    {
+                        Console.WriteLine("Errore: Il reddito annuale deve contenere almeno 4 cifre numeriche.");
+                        Console.Write("Inserisci nuovamente il reddito annuale: ");
+
+                        // You may want to handle the case when the user enters a non-numeric value.
+                        int.TryParse(Console.ReadLine(), out value);
+                    }
+
                     _redditoAnnuale = value;
                 }
                 catch (Exception ex)
@@ -239,6 +271,11 @@ namespace PRIMO_COMPITO_BACK__END
             }
         }
 
+        private bool IsValidRedditoAnnuale(int value)
+        {
+           
+            return Math.Abs(value).ToString().Length >= 4;
+        }
 
 
 
